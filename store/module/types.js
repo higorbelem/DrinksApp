@@ -1,0 +1,2 @@
+export const SET_COCKTAILS = '@SET_COCKTAILS';
+export const SET_REFRESHING = '@SET_REFRESHING';
