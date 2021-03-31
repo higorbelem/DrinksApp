@@ -59,7 +59,7 @@ const Main = () => {
   const logoAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: withTiming(logoOpacity.value),
-      height: withTiming(interpolate(logoOpacity.value, [0, 1], [0, 200])),
+      height: withTiming(interpolate(logoOpacity.value, [0, 1], [0, 150])),
     };
   });
 
@@ -71,15 +71,17 @@ const Main = () => {
   });
 
   useEffect(()=>{
-    dispatch({type: Types.SET_REFRESHING, payload: true});
-    const timeOutId = setTimeout(async() => {
-
-      const res = await fetchData(searchValue);
-
-      dispatch({type: Types.SET_COCKTAILS, payload: res.drinks});
-      dispatch({type: Types.SET_REFRESHING, payload: false});
-    }, 100);
-    return () => clearTimeout(timeOutId);
+    if(searchValue.length > 2){
+      dispatch({type: Types.SET_REFRESHING, payload: true});
+      const timeOutId = setTimeout(async() => {
+  
+        const res = await fetchData(searchValue);
+  
+        dispatch({type: Types.SET_COCKTAILS, payload: res.drinks});
+        dispatch({type: Types.SET_REFRESHING, payload: false});
+      }, 100);
+      return () => clearTimeout(timeOutId);
+    }
   }, [searchValue]);
 
   return (

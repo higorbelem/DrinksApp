@@ -21,12 +21,13 @@ export default StyleSheet.create({
   },
   logoView:{
     width: '100%',
+    height: 150,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
-    width: '70%',
-    height: 200,
+    width: '60%',
+    height: 150,
   },
   inputView: {
     justifyContent: 'space-between',
