@@ -1,6 +1,8 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet, Dimensions, StatusBar} from 'react-native';
 
 const {height} = Dimensions.get('window');
+
+const bottomBarHeight = Dimensions.get('screen').height - Dimensions.get('window').height - StatusBar.currentHeight;
 
 export default StyleSheet.create({
   container: {
@@ -38,23 +40,28 @@ export default StyleSheet.create({
     flex: 1, 
     textAlign: 'center',
     height: 60,
-    color: 'black'
+    color: 'black',
+    fontSize: 16,
   },
   inputButtton:{
     justifyContent: 'center',
     alignItems: 'center',
-    width: 50,
+    width: 60,
     height: 60,
+  },
+  icon: {
+    width: 30,
+    height: 30
   },
   listView:{
     position: 'absolute',
     top: 10,
     width: '100%',
-    height: height -70,
     alignItems: 'center',
   },
   list:{
-    width: '100%'
+    width: '100%',
+    height: height - 80 - bottomBarHeight,
   },
   itemView:{
     flexDirection: 'row',
@@ -79,5 +86,18 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     marginTop: 20,
+  },
+  indicator: {
+    position: 'absolute',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    top: 100,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 2,
   }
 });

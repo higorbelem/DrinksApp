@@ -1,13 +1,7 @@
 import * as Types from '../../types';
 
 const INITIAL_STATE = {
-  cocktails: [
-    {
-      strDrink: 'Vodka an Tonic',
-      strDrinkThumb: 'https://avatars.githubusercontent.com/u/43496598?s=60&v=4',
-      idDrink : '0',
-    }
-  ],
+  cocktails: [],
   refreshing: false,
 };
 

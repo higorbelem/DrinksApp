@@ -3,12 +3,11 @@ import {
   View,
   Text,
   Image,
-  SafeAreaView,
-  Touchable,
   TouchableOpacity,
   TextInput,
   Dimensions,
-  FlatList
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import {Keyboard} from 'react-native'
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolate } from 'react-native-reanimated';
@@ -43,8 +42,11 @@ const fetchData = async (searchValue) => {
 const Main = () => {
   const dispatch = useDispatch();
   const cocktails = useSelector((state) => state.cocktails.cocktails);
+  const refreshing = useSelector((state) => state.cocktails.refreshing);
 
   const [searchValue, setSearchValue] = useState('');
+  const [listVisible, setListVisible] = useState(false);
+  const [iconPath, setIconPath] = useState(require('../../src/images/searchIcon.png'));
 
   const inputOffset = useSharedValue(START_POSITION);
   const inputAnimatedStyle = useAnimatedStyle(() => {
@@ -69,9 +71,13 @@ const Main = () => {
   });
 
   useEffect(()=>{
+    dispatch({type: Types.SET_REFRESHING, payload: true});
     const timeOutId = setTimeout(async() => {
+
       const res = await fetchData(searchValue);
+
       dispatch({type: Types.SET_COCKTAILS, payload: res.drinks});
+      dispatch({type: Types.SET_REFRESHING, payload: false});
     }, 100);
     return () => clearTimeout(timeOutId);
   }, [searchValue]);
@@ -100,26 +106,42 @@ const Main = () => {
           <View style={styles.inputView}>
             <TouchableOpacity
               style={styles.inputButtton}
+              disabled={!setListVisible}
               onPress={async () => {
-                inputOffset.value = START_POSITION;
-                logoOpacity.value = 1;
-                listOffset.value = height;
-                Keyboard.dismiss();
+                if(listVisible){
+                  setSearchValue('');
+                  dispatch({type: Types.SET_COCKTAILS, payload: []});
+
+                  inputOffset.value = START_POSITION;
+                  logoOpacity.value = 1;
+                  listOffset.value = height;
+                  Keyboard.dismiss();
+                }
+
+                setIconPath(require('../../src/images/searchIcon.png'))
+                setListVisible(false);
               }}
             >
-              <Text>X</Text>
+              <Image 
+                style={styles.icon}
+                source={iconPath}
+              />
             </TouchableOpacity>
             <TextInput 
               style={styles.input}
               placeholder="Search your favorite cocktail"
-              placeholderTextColor='#888888'
+              placeholderTextColor='#4A4A4A'
               onChangeText={(text) => setSearchValue(text)}
+              value={searchValue}
               onFocus={() => {
                 inputOffset.value = 0;
                 logoOpacity.value = 0;
                 listOffset.value = 70;
+
+                setIconPath(require('../../src/images/backIcon.png'))
+                setListVisible(true);
               }}
-          />   
+            />   
           </View> 
         </Animated.View>
 
@@ -156,6 +178,20 @@ const Main = () => {
           }
           
         </Animated.View> 
+
+        {
+          refreshing && listVisible ? 
+            <ActivityIndicator 
+              style={styles.indicator}
+              size='large'
+              color='#d62b5e'
+              animating={true}
+            />
+          :
+            <></>
+        }
+        
+
       </LinearGradient>
     </View>
   );
