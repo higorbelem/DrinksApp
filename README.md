@@ -1,4 +1,4 @@
-# Foxbox code challenge
+# Drinks app challenge
 ## How to run
 * Considering that react-native and git are already installed follow these steps.
 * Run the following command to download de project: `git clone https://github.com/higorbelem/FoxboxProject.git`.
